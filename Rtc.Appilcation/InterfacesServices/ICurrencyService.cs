@@ -10,11 +10,11 @@ namespace Rtc.Appilcation.InterfacesServices
 {
     public  interface ICurrencyService
     {
-        Task<IEnumerable<CurrencyDtos>> GetAllCurrenciesAsync();
-        Task<CurrencyDtos> GetCurrencyByIdxAsync(int idx);
-        Task<CurrencyDtos> GetCurrencyByCodeAsync(string currencyCode);
-        Task<CurrencyDtos> CreateCurrencyAsync(CurrencyDtos currency);
-        Task<bool> UpdateCurrencyAsync(CurrencyDtos currency); 
+        Task<IEnumerable<CurrencyDto>> GetAllCurrenciesAsync();
+        Task<CurrencyDto> GetCurrencyByIdxAsync(int idx);
+        Task<CurrencyDto> GetCurrencyByCodeAsync(string currencyCode);
+        Task<CurrencyDto> CreateCurrencyAsync(CurrencyDto currency);
+        Task<bool> UpdateCurrencyAsync(CurrencyDto currency); 
         Task<bool> DeleteCurrencyAsync(int idx);
     }
 }

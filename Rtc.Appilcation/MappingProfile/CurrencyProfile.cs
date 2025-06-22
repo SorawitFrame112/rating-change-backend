@@ -14,11 +14,11 @@ namespace Rtc.Appilcation.MappingProfile
     {
         public CurrencyProfile()
         {
-            CreateMap<CurrencyDtos, Currency>();
-            CreateMap<CurrencyDtos, Currency>()
+            CreateMap<CurrencyDto, Currency>();
+            CreateMap<CurrencyDto, Currency>()
                 .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()) 
                 .ForMember(dest => dest.CreatedBy, opt => opt.Ignore());  
-            CreateMap<Currency, CurrencyDtos>();
+            CreateMap<Currency, CurrencyDto>();
         }
     }
 }

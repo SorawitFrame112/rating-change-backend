@@ -18,25 +18,25 @@ namespace Rtc.Application.Services
             _mapper = mapper;
         }
      
-        public async Task<IEnumerable<CurrencyDtos>> GetAllCurrenciesAsync()
+        public async Task<IEnumerable<CurrencyDto>> GetAllCurrenciesAsync()
         {
             var currencies = await _currencyRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<CurrencyDtos>>(currencies); 
+            return _mapper.Map<IEnumerable<CurrencyDto>>(currencies); 
         }
 
-        public async Task<CurrencyDtos> GetCurrencyByIdxAsync(int idx)
+        public async Task<CurrencyDto> GetCurrencyByIdxAsync(int idx)
         {
             var currency = await _currencyRepository.GetByIdAsync(idx);
-            return _mapper.Map<CurrencyDtos>(currency);
+            return _mapper.Map<CurrencyDto>(currency);
         }
 
-        public async Task<CurrencyDtos> GetCurrencyByCodeAsync(string currencyCode)
+        public async Task<CurrencyDto> GetCurrencyByCodeAsync(string currencyCode)
         {
             var currency = await _currencyRepository.GetByCurrencyCodeAsync(currencyCode);
-            return _mapper.Map<CurrencyDtos>(currency);
+            return _mapper.Map<CurrencyDto>(currency);
         }
 
-        public async Task<CurrencyDtos> CreateCurrencyAsync(CurrencyDtos currencyDto)
+        public async Task<CurrencyDto> CreateCurrencyAsync(CurrencyDto currencyDto)
         {
             var currency = _mapper.Map<Currency>(currencyDto);
             var existingCurrency = await _currencyRepository.GetByCurrencyCodeAsync(currency.CurrencyCode);
@@ -48,9 +48,9 @@ namespace Rtc.Application.Services
             currency.CreatedBy = "API_User"; 
             await _currencyRepository.AddAsync(currency);
             await _currencyRepository.SaveChangesAsync();
-            return _mapper.Map<CurrencyDtos>(currency);
+            return _mapper.Map<CurrencyDto>(currency);
         }
-        public async Task<bool> UpdateCurrencyAsync(CurrencyDtos currencyDto)
+        public async Task<bool> UpdateCurrencyAsync(CurrencyDto currencyDto)
         {
             var existingCurrency = await _currencyRepository.GetByIdAsync((int)currencyDto.Idx);
             if (existingCurrency == null)

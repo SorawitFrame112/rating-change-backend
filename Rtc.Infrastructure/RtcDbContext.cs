@@ -1,30 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore; 
 using Rtc.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Rtc.Infrastructure
 {
-    public  class RtcDbContext : DbContext
+    public class RtcDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
-        public RtcDbContext(DbContextOptions<RtcDbContext> options) : base(options)
+        public RtcDbContext(DbContextOptions<RtcDbContext> options)
+            : base(options)
         {
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Currency>().HasKey(c => c.Idx);
-            modelBuilder.Entity<Currency>()
-                .HasIndex(c => c.CurrencyCode)
-                .IsUnique();
+            modelBuilder.Entity<Currency>().HasIndex(c => c.CurrencyCode).IsUnique();
+            modelBuilder.Entity<Currency>().Property(c => c.CurrencyCode).IsRequired().HasMaxLength(50);
+            modelBuilder.Entity<Currency>().Property(c => c.CurrencyName).IsRequired().HasMaxLength(100);
+
         }
-
-        public DbSet<CustomerBoardRate> CustomerBoardRates { get; set; }
-        public  DbSet<CustomerBoardRateData> CustomerBoardRateDatas { get; set; }
-        public  DbSet<Currency> Currencies { get; set; }
-
+            public DbSet<Currency> Currencies { get; set; }
     }
 }

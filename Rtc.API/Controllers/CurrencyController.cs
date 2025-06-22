@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rtc.Appilcation.InterfacesServices;
 using Rtc.Domain.Dtos;
@@ -6,7 +7,8 @@ using Rtc.Domain.Dtos;
 namespace Rtc.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")] 
+    [Route("api/[controller]")]
+  
     public class CurrencyController : ControllerBase
     {
         private readonly ICurrencyService _currencyService;
@@ -16,15 +18,18 @@ namespace Rtc.API.Controllers
             _currencyService = currencyService;
         }
 
+
+        [Authorize(Roles = "User,Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CurrencyDtos>>> GetAllCurrencies()
+        public async Task<ActionResult<IEnumerable<CurrencyDto>>> GetAllCurrencies()
         {
             var currencies = await _currencyService.GetAllCurrenciesAsync();
             return Ok(currencies); 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{idx}")]
-        public async Task<ActionResult<CurrencyDtos>> GetCurrencyByIdx(int idx)
+        public async Task<ActionResult<CurrencyDto>> GetCurrencyByIdx(int idx)
         {
             var currency = await _currencyService.GetCurrencyByIdxAsync(idx);
             if (currency == null)
@@ -33,9 +38,10 @@ namespace Rtc.API.Controllers
             }
             return Ok(currency); 
         }
-
+        
+        [Authorize(Roles = "Admin")]
         [HttpGet("ByCode/{currencyCode}")]
-        public async Task<ActionResult<CurrencyDtos>> GetCurrencyByCode(string currencyCode)
+        public async Task<ActionResult<CurrencyDto>> GetCurrencyByCode(string currencyCode)
         {
             var currency = await _currencyService.GetCurrencyByCodeAsync(currencyCode);
             if (currency == null)
@@ -45,11 +51,9 @@ namespace Rtc.API.Controllers
             return Ok(currency);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CurrencyDtos))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)] 
-        public async Task<ActionResult<CurrencyDtos>> CreateCurrency([FromBody] CurrencyDtos currencyDto)
+        public async Task<ActionResult<CurrencyDto>> CreateCurrency([FromBody] CurrencyDto currencyDto)
         {
             if (!ModelState.IsValid) 
             {
@@ -71,12 +75,10 @@ namespace Rtc.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{idx}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)] 
-        public async Task<IActionResult> UpdateCurrency(int idx, [FromBody] CurrencyDtos currencyDto)
+    
+        public async Task<IActionResult> UpdateCurrency(int idx, [FromBody] CurrencyDto currencyDto)
         {
             if (idx != currencyDto.Idx) // Ensure the ID in the route matches the ID in the body
             {
@@ -107,10 +109,8 @@ namespace Rtc.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{idx}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)] 
         public async Task<IActionResult> DeleteCurrency(int idx)
         {
             try
